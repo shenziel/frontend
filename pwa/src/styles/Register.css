@@ -1,0 +1,21 @@
+/* Common styles for centering content */
+
+.page-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: 100vh;           /* Full viewport height */
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .page-content {
+    width: 100%;
+    max-width: 400px; /* Maximum width for the form */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  

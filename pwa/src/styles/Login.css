@@ -1,0 +1,64 @@
+/* Centering styles */
+.page-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: 100vh;           /* Full viewport height */
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .page-content {
+    width: 100%;
+    max-width: 400px; /* Maximum width for the form */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Form styling */
+  form {
+    display: flex;
+    flex-direction: column; /* Stack form elements vertically */
+  }
+  
+  form div {
+    margin-bottom: 15px; /* Space between form elements */
+  }
+  
+  label {
+    display: block; /* Ensure label is on its own line */
+    margin-bottom: 5px; /* Space between label and input */
+    font-weight: bold;
+  }
+  
+  input {
+    width: 95%;
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  button {
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
+  
