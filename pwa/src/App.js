@@ -1,16 +1,21 @@
 import React from "react";
-import { BrowserRouter, useRoutes } from "react-router-dom";
+import { BrowserRouter, Navigate, useRoutes } from "react-router-dom";
 import Login from "./pages/Login";
 import FuelLogs from "./pages/FuelLogs";
 import Register from "./pages/Register";
+import UserVehicles from "./pages/UserVehicles";
+import VehicleDetails from "./pages/VehicleDetails";
 import Home from "./pages/Home";
 
 function AppRoutes() {
   const routes = useRoutes([
-    { path: "/", element: <Login /> },
+    { path: "/", element: <Navigate to="/home" replace /> },
+    { path: "/login", element: <Login /> },
     { path: "/home", element: <Home /> },
     { path: "/register", element: <Register /> },
-    { path: "/fuel-logs", element: <FuelLogs /> },
+    { path: "/fuel-logs/:licensePlate", element: <FuelLogs /> },
+    { path: "/my-vehicles", element: <UserVehicles /> },
+    { path: "/vehicle-details/:licensePlate", element: <VehicleDetails /> },
   ]);
 
   return routes;

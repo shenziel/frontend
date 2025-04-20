@@ -1,9 +1,7 @@
 import axios from "axios";
 
-// Set up base URL for your API
-const API_URL = "http://localhost:8080"; // Use your API URL
+const API_URL = "http://localhost:8080";
 
-// Function for user login
 export const loginUser = async (username, password) => {
   try {
     const response = await axios.post(`${API_URL}/auth/login`, {
@@ -17,15 +15,38 @@ export const loginUser = async (username, password) => {
   }
 };
 
-// Example: Get fuel logs for a user
 export const getFuelLogs = async (token) => {
   try {
-    const response = await axios.get(`${API_URL}/fuel-logs`, {
+    const response = await axios.get(`${API_URL}/api/fuel`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
   } catch (error) {
     console.error("Error fetching fuel logs:", error);
+    throw error;
+  }
+};
+
+export const getVehicleDetails = async (token, licensePlate) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/vehicle/plate/${licensePlate}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching vehicle details:", error);
+    throw error;
+  }
+};
+
+export const getAllVehicles = async (token) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/vehicle`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all vehicles:", error);
     throw error;
   }
 };
