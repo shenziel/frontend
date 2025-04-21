@@ -6,16 +6,27 @@ import "./VehicleDetails.css";
 const VehicleDetails = () => {
   const { licensePlate } = useParams();
   const [vehicle, setVehicle] = useState(null);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchVehicleDetails = async () => {
       const token = localStorage.getItem("token");
       try {
-        const data = await getVehicleDetails(token, licensePlate); // Fetch vehicle details
+        const data = await getVehicleDetails(token, licensePlate);
         setVehicle(data);
       } catch (error) {
-        console.error("Error fetching vehicle details:", error);
+        // Extract error message from the response
+        if (error.response?.status === 401) {
+          const errorMessage = error.response?.data?.error;
+          console.error(errorMessage);
+          navigate("/home");
+        } else {
+          const errorMessage =
+            error.response?.data?.error || "Failed to fetch data. Please try again later.";
+          console.error("Error fetching fuel logs:", errorMessage);
+          setError(errorMessage);
+        }
       }
     };
 
@@ -26,9 +37,21 @@ const VehicleDetails = () => {
     return <p>Loading vehicle details...</p>;
   }
 
+  const closeErrorPopup = () => {
+    setError(null);
+  };
+
   return (
     <div className="vehicle-details-container">
       <h2>Vehicle Details</h2>
+      {error && (
+        <div className="error-popup">
+          <div className="error-popup-content">
+            <p>{error}</p>
+            <button onClick={closeErrorPopup} className="close-button">Close</button>
+          </div>
+        </div>
+      )}
       <p><strong>License Plate:</strong> {vehicle.licensePlate}</p>
       <p><strong>Make:</strong> {vehicle.make}</p>
       <p><strong>Model:</strong> {vehicle.model}</p>

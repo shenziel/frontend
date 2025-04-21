@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getFuelLogs, getVehicleDetails } from "../services/api";
 import "./FuelLogs.css";
 
@@ -7,6 +7,8 @@ const FuelLogs = () => {
   const { licensePlate } = useParams();
   const [logs, setLogs] = useState([]);
   const [vehicle, setVehicle] = useState(null);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -19,15 +21,37 @@ const FuelLogs = () => {
         setLogs(logsData);
         setVehicle(vehicleData);
       } catch (error) {
-        console.error("Error fetching fuel logs:", error);
+        // Extract error message from the response
+        if (error.response?.status === 401) {
+          const errorMessage = error.response?.data?.error;
+          console.error(errorMessage);
+          navigate("/home");
+        } else {
+          const errorMessage =
+            error.response?.data?.error || "Failed to fetch data. Please try again later.";
+          console.error("Error fetching fuel logs:", errorMessage);
+          setError(errorMessage);
+        }
       }
     };
     fetchLogs();
-  }, []);
+  }, [licensePlate, navigate]);
+
+  const closeErrorPopup = () => {
+    setError(null);
+  };
 
   return (
     <div>
       <h2>Fuel Logs</h2>
+      {error && (
+        <div className="error-popup">
+          <div className="error-popup-content">
+            <p>{error}</p>
+            <button onClick={closeErrorPopup} className="close-button">Close</button>
+          </div>
+        </div>
+      )}
       {vehicle && (
         <div className="vehicle-details">
           <p><strong>Vehicle:</strong> {vehicle.make} {vehicle.model}</p>
