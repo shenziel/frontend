@@ -25,7 +25,7 @@ const FuelLogs = () => {
         if (error.response?.status === 401) {
           const errorMessage = error.response?.data?.error;
           console.error(errorMessage);
-          //navigate("/home");
+          setError(errorMessage);
         } else {
           const errorMessage =
             error.response?.data?.error || "Failed to fetch data. Please try again later.";
@@ -39,6 +39,7 @@ const FuelLogs = () => {
 
   const closeErrorPopup = () => {
     setError(null);
+    localStorage.removeItem("token");
     navigate("/home");
   };
 
