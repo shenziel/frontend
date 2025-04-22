@@ -20,8 +20,7 @@ const Login = () => {
 
       // Save token in local storage or any state management
       localStorage.setItem("token", token);
-      alert("Login successful!");
-
+      
       // Redirect to fuel logs page
       navigate("/home");
     } catch (error) {
