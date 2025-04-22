@@ -68,3 +68,48 @@
 .close-button:hover {
     background-color: #501217;
 }
+
+.table-footer {
+    display: table-footer-group;
+    background-color: #f9f9f9;
+    border-top: 2px solid #ddd;
+}
+
+.table-footer .table-row {
+    display: table-row;
+}
+
+.table-footer .table-cell {
+    display: table-cell;
+    padding: 8px 12px;
+    text-align: left;
+    border-top: 1px solid #ddd;
+}
+
+.table-footer input[type="text"],
+.table-footer input[type="number"],
+.table-footer input[type="date"] {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.table-footer input[type="checkbox"] {
+    margin: 0 auto;
+    display: block;
+}
+
+.table-footer button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.table-footer button:hover {
+    background-color: #0056b3;
+}

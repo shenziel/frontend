@@ -9,6 +9,14 @@ const FuelLogs = () => {
   const [logs, setLogs] = useState([]);
   const [vehicle, setVehicle] = useState(null);
   const [error, setError] = useState(null);
+  const [newRow, setNewRow] = useState({
+    date: "",
+    distance: "",
+    amount: "",
+    pricePerLiter: "",
+    totalCost: "",
+    fullTank: false,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +45,44 @@ const FuelLogs = () => {
     fetchLogs();
   }, [licensePlate, navigate]);
 
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setNewRow((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleAddRow = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("https://your-api-url.com/fuel-logs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newRow),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add new row");
+      }
+      const addedRow = await response.json();
+      setLogs((prevLogs) => [...prevLogs, addedRow]);
+      setNewRow({
+        date: "",
+        distance: "",
+        amount: "",
+        pricePerLiter: "",
+        totalCost: "",
+        fullTank: false,
+      });
+    } catch (error) {
+      console.error("Error adding new row:", error);
+      setError("Failed to add new row. Please try again.");
+    }
+  };
+
   const closeErrorPopup = () => {
     setError(null);
     localStorage.removeItem("token");
@@ -63,6 +109,7 @@ const FuelLogs = () => {
             <div className="table-cell">Total Cost</div>
             <div className="table-cell">Vehicle Km</div>
             <div className="table-cell">Full Tank</div>
+            <div className="table-cell">Actions</div>
           </div>
         </div>
         <div className="table-body">
@@ -74,11 +121,64 @@ const FuelLogs = () => {
               <div className="table-cell">{log.pricePerLiter}</div>
               <div className="table-cell">{log.totalCost}</div>
               <div className="table-cell">{vehicle.kilometrage}</div>
-              <div className="table-cell">
-                {log.fullTank ? "Yes" : "No"}
-              </div>
+              <div className="table-cell">{log.fullTank ? "Yes" : "No"}</div>
             </div>
           ))}
+        </div>
+        <div className="table-footer">
+          <div className="table-row">
+            <div className="table-cell">
+              <input
+                type="date"
+                name="date"
+                value={newRow.date}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="table-cell">
+              <input
+                type="number"
+                name="distance"
+                value={newRow.distance}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="table-cell">
+              <input
+                type="number"
+                name="amount"
+                value={newRow.amount}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="table-cell">
+              <input
+                type="number"
+                name="pricePerLiter"
+                value={newRow.pricePerLiter}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="table-cell">
+              <input
+                type="number"
+                name="totalCost"
+                value={newRow.totalCost}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="table-cell">
+              <input
+                type="checkbox"
+                name="fullTank"
+                checked={newRow.fullTank}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="table-cell">
+              <button onClick={handleAddRow}>Add Row</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
