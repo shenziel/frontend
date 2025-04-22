@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import routes from "../routes";
 import "./../styles/Home.css";
 
 const Home = () => {
@@ -24,8 +25,8 @@ const Home = () => {
           <section className="home-intro">
             <h2>Features</h2>
             <ul>
-              <li><Link to="/fuel-logs">Track fuel consumption</Link></li>
-              <li><Link to="/my-vehicles">My vehicles</Link></li>
+              <li><Link to={routes.manageFuelLogs}>Track fuel consumption</Link></li>
+              <li><Link to={routes.userVehicles}>My vehicles</Link></li>
               <li>Manage fuel logs</li>
               <li>View detailed statistics</li>
             </ul>
@@ -36,15 +37,15 @@ const Home = () => {
           <section className="home-actions">
             <h2>Get Started</h2>
             <p>
-              To get started, please <Link to="/register">register</Link> or{" "}
-              <Link to="/login">log in</Link>.
+              To get started, please <Link to={routes.register}>register</Link> or{" "}
+              <Link to={routes.login}>log in</Link>.
             </p>
           </section>
         )}
       </main>
 
       <footer className="home-footer">
-        <p>&copy; 2024 FuelManager. All rights reserved.</p>
+        <p>&copy; 2025 FuelManager. All rights reserved.</p>
       </footer>
     </div>
   );

@@ -6,19 +6,22 @@ import Register from "./pages/Register";
 import UserVehicles from "./pages/UserVehicles";
 import VehicleDetails from "./pages/VehicleDetails";
 import Home from "./pages/Home";
+import routes from "./routes";
 
 function AppRoutes() {
-  const routes = useRoutes([
-    { path: "/", element: <Navigate to="/home" replace /> },
-    { path: "/login", element: <Login /> },
-    { path: "/home", element: <Home /> },
-    { path: "/register", element: <Register /> },
-    { path: "/fuel-logs/:licensePlate", element: <FuelLogs /> },
-    { path: "/my-vehicles", element: <UserVehicles /> },
-    { path: "/vehicle-details/:licensePlate", element: <VehicleDetails /> },
+  const appRoutes = useRoutes([
+    { path: "/", element: <Navigate to={routes.home} replace /> },
+    { path: routes.login, element: <Login /> },
+    { path: routes.home, element: <Home /> },
+    { path: routes.register, element: <Register /> },
+    { path: routes.fuelLogs, element: <FuelLogs /> },
+    { path: routes.userVehicles, element: <UserVehicles /> },
+    { path: routes.vehicleDetails, element: <VehicleDetails /> },
+    { path: routes.manageFuelLogs, element: <FuelLogs /> },
+    { path: routes.statistics, element: <FuelLogs /> },
   ]);
 
-  return routes;
+  return appRoutes;
 }
 
 function App() {
