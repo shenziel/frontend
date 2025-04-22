@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getFuelLogs, getVehicleDetails } from "../services/api";
+import ErrorHandler from "../components/ErrorHandler/ErrorHandler";
 import "./FuelLogs.css";
 
 const FuelLogs = () => {
@@ -21,11 +22,10 @@ const FuelLogs = () => {
         setLogs(logsData);
         setVehicle(vehicleData);
       } catch (error) {
-        // Extract error message from the response
         if (error.response?.status === 401) {
           const errorMessage = error.response?.data?.error;
           console.error(errorMessage);
-          navigate("/home");
+          //navigate("/home");
         } else {
           const errorMessage =
             error.response?.data?.error || "Failed to fetch data. Please try again later.";
@@ -39,19 +39,13 @@ const FuelLogs = () => {
 
   const closeErrorPopup = () => {
     setError(null);
+    navigate("/home");
   };
 
   return (
     <div>
       <h2>Fuel Logs</h2>
-      {error && (
-        <div className="error-popup">
-          <div className="error-popup-content">
-            <p>{error}</p>
-            <button onClick={closeErrorPopup} className="close-button">Close</button>
-          </div>
-        </div>
-      )}
+      <ErrorHandler error={error} onClose={closeErrorPopup} />
       {vehicle && (
         <div className="vehicle-details">
           <p><strong>Vehicle:</strong> {vehicle.make} {vehicle.model}</p>

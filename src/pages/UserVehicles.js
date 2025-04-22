@@ -1,27 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getAllVehicles } from "../services/api"; // Assuming this API fetches all vehicles
+import { Link, useNavigate } from "react-router-dom";
+import { getAllVehicles } from "../services/api";
+import ErrorHandler from "../components/ErrorHandler/ErrorHandler";
 import "./UserVehicles.css";
 
 const UserVehicles = () => {
-  const [vehicles, setVehicles] = useState([]);
+  const [vehicles, setVehicles] = useState([]);  
+  const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
   useEffect(() => {
     const fetchVehicles = async () => {
       const token = localStorage.getItem("token");
       try {
-        const data = await getAllVehicles(token); // Fetch all vehicles
+        const data = await getAllVehicles(token);
         setVehicles(data);
       } catch (error) {
-        console.error("Error fetching vehicles:", error);
+        if (error.response?.status === 401) {
+          const errorMessage = error.response?.data?.error;
+          console.error(errorMessage);
+          //navigate("/home");
+        } else {
+          const errorMessage =
+            error.response?.data?.error || "Failed to fetch data. Please try again later.";
+          console.error("Error fetching fuel logs:", errorMessage);
+          setError(errorMessage);
+        }
       }
     };
     fetchVehicles();
   }, []);
 
+  const closeErrorPopup = () => {
+    setError(null);
+    navigate("/home");
+  };
+
   return (
     <div className="vehicle-details-container">
       <h2>Vehicle List</h2>
+      <ErrorHandler error={error} onClose={closeErrorPopup} />
       <div className="table">
         <div className="table-header">
           <div className="table-row">
