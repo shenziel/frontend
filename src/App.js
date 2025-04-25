@@ -5,6 +5,7 @@ import FuelLogs from "./pages/FuelLogs";
 import Register from "./pages/Register";
 import UserVehicles from "./pages/UserVehicles";
 import VehicleDetails from "./pages/VehicleDetails";
+import FuelLogsManager from "./pages/FuelLogsManager";
 import Home from "./pages/Home";
 import routes from "./routes";
 
@@ -17,7 +18,7 @@ function AppRoutes() {
     { path: routes.fuelLogs, element: <FuelLogs /> },
     { path: routes.userVehicles, element: <UserVehicles /> },
     { path: routes.vehicleDetails, element: <VehicleDetails /> },
-    { path: routes.manageFuelLogs, element: <FuelLogs /> },
+    { path: routes.manageFuelLogs, element: <FuelLogsManager /> },
     { path: routes.statistics, element: <FuelLogs /> },
   ]);
 
