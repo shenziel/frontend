@@ -8,6 +8,7 @@ const VehicleDetails = () => {
   const { licensePlate } = useParams();
   const [vehicle, setVehicle] = useState(null);
   const [error, setError] = useState(null);
+  const [closePopup, setClosePopup] = useState('#');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,8 +20,9 @@ const VehicleDetails = () => {
       } catch (error) {
         if (error.response?.status === 401) {
           const errorMessage = error.response?.data?.error;
-          console.error(errorMessage);
-          //navigate("/home");
+          setError(errorMessage);
+          setClosePopup('/home')
+          localStorage.removeItem("token");
         } else {
           const errorMessage =
             error.response?.data?.error || "Failed to fetch data. Please try again later.";
@@ -39,22 +41,31 @@ const VehicleDetails = () => {
 
   const closeErrorPopup = () => {
     setError(null);
-    navigate("/home");
+    navigate(closePopup);
+  };
+
+  const handleGoBack = () => {
+    navigate(-1);
   };
 
   return (
-    <div className="vehicle-details-container">
-      <h2>Vehicle Details</h2>
-      <ErrorHandler error={error} onClose={closeErrorPopup} />
-      <p><strong>License Plate:</strong> {vehicle.licensePlate}</p>
-      <p><strong>Make:</strong> {vehicle.make}</p>
-      <p><strong>Model:</strong> {vehicle.model}</p>
-      <p><strong>Year:</strong> {vehicle.year}</p>
-      <p><strong>Kilometrage:</strong> {vehicle.kilometrage}</p>
-      <p><strong>Owner:</strong> {vehicle.userName}</p>
-      <button onClick={() => navigate(`/fuel-logs/${vehicle.licensePlate}`)} className="navigate-button">
-        Go to Fuel Logs
+    <div>
+      <button onClick={handleGoBack} className="back-button">
+        ← Back
       </button>
+      <ErrorHandler error={error} onClose={closeErrorPopup} />
+      <div className="vehicle-details-container">
+        <h2>Vehicle Details</h2>
+        <p><strong>License Plate:</strong> {vehicle.licensePlate}</p>
+        <p><strong>Make:</strong> {vehicle.make}</p>
+        <p><strong>Model:</strong> {vehicle.model}</p>
+        <p><strong>Year:</strong> {vehicle.year}</p>
+        <p><strong>Kilometrage:</strong> {vehicle.kilometrage}</p>
+        <p><strong>Owner:</strong> {vehicle.userName}</p>
+        <button onClick={() => navigate(`/fuel-logs/${vehicle.licensePlate}`)} className="navigate-button">
+          Go to Fuel Logs
+        </button>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getFuelLogs, getVehicleDetails } from "../services/api";
+import { getFuelLogs, getVehicleDetails, addFuelExpense } from "../services/api";
 import ErrorHandler from "../components/ErrorHandler/ErrorHandler";
 import "./FuelLogs.css";
 
@@ -9,6 +9,7 @@ const FuelLogs = () => {
   const [logs, setLogs] = useState([]);
   const [vehicle, setVehicle] = useState(null);
   const [error, setError] = useState(null);
+  const [closePopup, setClosePopup] = useState('#');
   const [newRow, setNewRow] = useState({
     date: "",
     distance: "",
@@ -34,6 +35,8 @@ const FuelLogs = () => {
           const errorMessage = error.response?.data?.error;
           console.error(errorMessage);
           setError(errorMessage);
+          setClosePopup('/home')
+          localStorage.removeItem("token");
         } else {
           const errorMessage =
             error.response?.data?.error || "Failed to fetch data. Please try again later.";
@@ -47,27 +50,30 @@ const FuelLogs = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setNewRow((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    setNewRow((prev) => {
+      const updatedRow = {
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      };
+
+      if (name === "pricePerLiter" || name === "amount") {
+        const pricePerLiter = parseFloat(updatedRow.pricePerLiter) || 0;
+        const amount = parseFloat(updatedRow.amount) || 0;
+        updatedRow.totalCost = (pricePerLiter * amount).toFixed(2);
+      }
+  
+      return updatedRow;
+    });
   };
 
   const handleAddRow = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("https://your-api-url.com/fuel-logs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(newRow),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to add new row");
-      }
-      const addedRow = await response.json();
+      const payload = {
+        ...newRow,
+        licensePlate,
+      };
+      const addedRow = await addFuelExpense(token, payload);
       setLogs((prevLogs) => [...prevLogs, addedRow]);
       setNewRow({
         date: "",
@@ -85,12 +91,18 @@ const FuelLogs = () => {
 
   const closeErrorPopup = () => {
     setError(null);
-    localStorage.removeItem("token");
-    navigate("/home");
+    navigate(closePopup);
+  };
+
+  const handleGoBack = () => {
+    navigate(-1);
   };
 
   return (
     <div>
+      <button onClick={handleGoBack} className="back-button">
+        ← Back
+      </button>
       <h2>Fuel Logs</h2>
       <ErrorHandler error={error} onClose={closeErrorPopup} />
       {vehicle && (
@@ -120,7 +132,7 @@ const FuelLogs = () => {
               <div className="table-cell">{log.amount}</div>
               <div className="table-cell">{log.pricePerLiter}</div>
               <div className="table-cell">{log.totalCost}</div>
-              <div className="table-cell">{vehicle.kilometrage}</div>
+              <div className="table-cell">{log.kilometrage}</div>
               <div className="table-cell">{log.fullTank ? "Yes" : "No"}</div>
             </div>
           ))}
@@ -163,8 +175,24 @@ const FuelLogs = () => {
               <input
                 type="number"
                 name="totalCost"
-                value={newRow.totalCost}
-                onChange={handleInputChange}
+                value={
+                  newRow.pricePerLiter && newRow.amount
+                    ? (parseFloat(newRow.pricePerLiter) * parseFloat(newRow.amount)).toFixed(2)
+                    : ""
+                }
+                readOnly
+              />
+            </div>
+            <div className="table-cell">
+              <input
+                type="number"
+                name="kilometrage"
+                value={
+                  vehicle?.kilometrage && newRow.distance
+                  ? vehicle.kilometrage + parseFloat(newRow.distance)
+                  : ""
+                }
+                readOnly
               />
             </div>
             <div className="table-cell">

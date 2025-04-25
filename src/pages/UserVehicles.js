@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAllVehicles } from "../services/api";
 import ErrorHandler from "../components/ErrorHandler/ErrorHandler";
+import HeaderDetails from "../components/HeaderDetails/HeaderDetails";
 import "./UserVehicles.css";
 
 const UserVehicles = () => {
   const [vehicles, setVehicles] = useState([]);  
   const [error, setError] = useState(null);
-    const navigate = useNavigate();
+  const [closePopup, setClosePopup] = useState('#');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -19,7 +21,9 @@ const UserVehicles = () => {
         if (error.response?.status === 401) {
           const errorMessage = error.response?.data?.error;
           console.error(errorMessage);
-          //navigate("/home");
+          setError(errorMessage);
+          setClosePopup('/home')
+          localStorage.removeItem("token");
         } else {
           const errorMessage =
             error.response?.data?.error || "Failed to fetch data. Please try again later.";
@@ -33,12 +37,17 @@ const UserVehicles = () => {
 
   const closeErrorPopup = () => {
     setError(null);
-    navigate("/home");
+    navigate(closePopup);
+  };
+
+  const handleGoBack = () => {
+    navigate(-1);
   };
 
   return (
     <div className="vehicle-details-container">
-      <h2>Vehicle List</h2>
+      <HeaderDetails handleGoBack={handleGoBack} />
+      <h2 className="header-title">Vehicle List</h2>
       <ErrorHandler error={error} onClose={closeErrorPopup} />
       <div className="table">
         <div className="table-header">
