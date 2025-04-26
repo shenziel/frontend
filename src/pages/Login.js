@@ -3,7 +3,7 @@ import { loginUser } from "../services/api";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import "./../styles/Login.css";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -30,7 +30,6 @@ const Login = () => {
 
   return (
     <div>
-      <Header />
       <div className="page-container">
         <div className="page-content">
           <h2>Login</h2>

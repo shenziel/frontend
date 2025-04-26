@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Navigate, useRoutes } from "react-router-dom";
 import Login from "./pages/Login";
 import FuelLogs from "./pages/FuelLogs";
@@ -7,6 +7,8 @@ import UserVehicles from "./pages/UserVehicles";
 import VehicleDetails from "./pages/VehicleDetails";
 import FuelLogsManager from "./pages/FuelLogsManager";
 import Home from "./pages/Home";
+import Header from "./components/Header/Header";
+import "./App.css";
 import routes from "./routes";
 
 function AppRoutes() {
@@ -26,8 +28,16 @@ function AppRoutes() {
 }
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setLoggedIn(!!token); // Update loggedIn based on the presence of a token
+  }, []);
+
   return (
     <BrowserRouter>
+      <Header />
       <AppRoutes />
     </BrowserRouter>
   );
