@@ -61,7 +61,6 @@ const VehicleDetails = () => {
         <p><strong>Model:</strong> {vehicle.model}</p>
         <p><strong>Year:</strong> {vehicle.year}</p>
         <p><strong>Kilometrage:</strong> {vehicle.kilometrage}</p>
-        <p><strong>Owner:</strong> {vehicle.userName}</p>
         <button onClick={() => navigate(`/fuel-logs/${vehicle.licensePlate}`)} className="navigate-button">
           Go to Fuel Logs
         </button>
