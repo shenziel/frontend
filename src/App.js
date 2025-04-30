@@ -32,14 +32,16 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setLoggedIn(!!token); // Update loggedIn based on the presence of a token
+    setLoggedIn(!!token);
   }, []);
 
   return (
-    <BrowserRouter>
-      <Header />
-      <AppRoutes />
-    </BrowserRouter>
+    <div className="App">
+      <BrowserRouter>
+        <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+        <AppRoutes />
+      </BrowserRouter>
+    </div>
   );
 }
 

@@ -8,9 +8,7 @@ const Home = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      setHasToken(true);
-    }
+    setHasToken(!!token);
   }, []);
 
   return (
