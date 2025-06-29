@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import FormInput from "../components/FormInput";
 import "./../styles/Register.css";
 
@@ -30,10 +29,7 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post("http://your-api-url/register", {
-        username,
-        password,
-      });
+      const data = await registerUser(username, password);
       if (response.status === 200) {
         navigate("/login");
       } else {

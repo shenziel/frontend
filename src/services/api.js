@@ -1,8 +1,23 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080";
+const API_URL = process.env.BACKEND_URL;
 
 export const loginUser = async (username, password) => {
+  console.log("Logging in with:${API_URL}/auth/login");
+  try {
+    const response = await axios.post(`${API_URL}/auth/login`, {
+      username,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error logging in:", error);
+    throw error;
+  }
+};
+
+export const registerUser = async (username, password) => {
+  console.log("Logging in with:${API_URL}/auth/register");
   try {
     const response = await axios.post(`${API_URL}/auth/login`, {
       username,
