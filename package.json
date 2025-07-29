@@ -28,6 +28,7 @@
     "autoprefixer": "^10.4.20",
     "http-proxy-middleware": "2.0.9",
     "nanoid": ">=3.3.8",
+    "form-data": "3.0.4",
     "react-scripts": "5.0.1"
   },
   "overrides": {
